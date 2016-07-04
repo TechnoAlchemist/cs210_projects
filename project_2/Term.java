@@ -11,29 +11,48 @@ public class Term implements Comparable<Term> {
 
     // Constructs a term given the associated query string, having weight 0.
     public Term(String query) {
-        ...
+	if (query == null) {
+	    throw new java.lang.NullPointerException();
+	}
+	this.query = query;
+	this.weight = 0;
     }
 
     // Constructs a term given the associated query string and weight.
     public Term(String query, long weight) {
-        ...
+	if (query == null) {
+	    throw new java.lang.NullPointerException();
+	}
+	if (weight < 0) {
+	    throw new java.lang.IllegalArgumentException();
+	}
+	this.query = query;
+	this.weight = weight;
     }
 
     // Returns a reverse-weight comparator.
     public static Comparator<Term> byReverseWeightOrder() {
-        ...
+	return new ReverseWeightOrder();
     }
 
     // Helper reverse-weight comparator.
     private static class ReverseWeightOrder implements Comparator<Term> {
         public int compare(Term v, Term w) {
-            ...
+	    if (w.weight < v.weight) {
+		return -1;
+	    }
+	    else if (v.weight == w.weight) {
+		return 0;
+	    }
+	    else {
+		return 1;
+	    }
         }
     }
 
     // Returns a prefix-order comparator.
     public static Comparator<Term> byPrefixOrder(int r) {
-        ...
+	return new PrefixOrder(r);
     }
 
     // Helper prefix-order comparator.
